@@ -2,6 +2,11 @@
 
 import discord
 
+# Read info file to get any special information
+info_file = open('info.txt', 'r').readlines()
+# Read the first line to get the client token
+token = token=info_file[0].strip()
+
 intents = discord.Intents.default()
 intents.message_content = True
 
@@ -19,4 +24,4 @@ async def on_message(message):
     if message.content.startswith('hey dex'):
         await message.channel.send('I am not Rotom')
 
-client.run("ODg2NjgxNzg4NDk4NDUyNTEx.GdC3i_.tLUq4f_fBQvnHRGOL0LTJmlrq51S9nSn-EZ2xU")
+client.run(token)
