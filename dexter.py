@@ -1,27 +1,39 @@
 #!/usr/bin/env python
 
 import discord
+from discord import app_commands
+import pokebase
 
 # Read info file to get any special information
 info_file = open('info.txt', 'r').readlines()
 # Read the first line to get the client token
 token = token=info_file[0].strip()
 
-intents = discord.Intents.default()
-intents.message_content = True
 
-client = discord.Client(intents=intents)
-
-@client.event
-async def on_ready():
-    print(f'Logged in as {client.user}')
-
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
+class Client(discord.Client):
+    def __init__(self):
+        super().__init__(intents=discord.Intents.all())
+        self.synced =  False
     
-    if message.content.startswith('hey dex'):
-        await message.channel.send('I am not Rotom')
+    async def on_ready(self):
+        await self.wait_until_ready()
+        if not self.synced:
+            await tree.sync()
+            self.synced = True
+        print(f'Logged in as {self.user}')
 
-client.run(token)
+bot = Client()
+tree = app_commands.CommandTree(bot)
+
+@tree.command(name='ping')
+async def ping(interaction: discord.Interaction):
+    await interaction.response.send_message(f'pong')
+
+@tree.command(name='search_name')
+async def search(interaction: discord.Interaction, name: str):
+    await interaction.response.send_message(f'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{pokebase.pokemon_species(name.lower()).id}.png')
+@tree.command(name='search_id')
+async def search(interaction: discord.Interaction, id: int):
+    await interaction.response.send_message(f'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{id}.png')
+
+bot.run(token)
