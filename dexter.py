@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import discord
-from discord import app_commands
 import pokebase
 
 # Read info file to get any special information
@@ -22,11 +21,7 @@ class Client(discord.Client):
         print(f'Logged in as {self.user}')
 
 bot = Client()
-tree = app_commands.CommandTree(bot)
-
-@tree.command(name='ping')
-async def ping(interaction: discord.Interaction):
-    await interaction.response.send_message(f'pong')
+tree = discord.app_commands.CommandTree(bot)
 
 @tree.command(name='search_name', description='Search for a Pokémon by its English name')
 async def search_name(interaction: discord.Interaction, name: str):
