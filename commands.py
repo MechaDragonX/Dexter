@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from decimal import Decimal
 import discord
 from enum import IntEnum
 import pokebase
@@ -106,6 +107,28 @@ class Commands:
                         types += pokemon.types[i].type.names[0].name
             i += 1
 
+        height = ''
+        meter = pokemon.height / 10
+        match language:
+            case Language.English:
+                foot = int((meter * 3.281) - float(Decimal(meter * 3.281) % 1))
+                inch = round(float(Decimal(meter * 3.281) % 1) *  12)
+                height = f'{meter}m / {foot}\'{inch}"'
+            case Language.JapaneseKana:
+                height = f'{meter}m'
+            case Language.JapaneseKanji:
+                height = f'{meter}m'
+
+        weight = ''
+        kilo = pokemon.weight / 10
+        match language:
+            case Language.English:
+                weight = f'{pokemon.weight / 10}kg / {round((pokemon.weight / 10) * 2.205, 1)}lb"'
+            case Language.JapaneseKana:
+                weight = f'{pokemon.weight / 10}kg'
+            case Language.JapaneseKanji:
+                weight = f'{pokemon.weight / 10}kg'
+
         embed = discord.Embed(
             title=title,
             color=Commands._color,
@@ -125,6 +148,18 @@ class Commands:
                     name=Commands._template_text_en[2],
                     value=types,
                     inline=False
+                )
+                # Add height field
+                embed.add_field(
+                    name=Commands._template_text_en[3],
+                    value=height,
+                    inline=True
+                )
+                # Add weight field
+                embed.add_field(
+                    name=Commands._template_text_en[4],
+                    value=weight,
+                    inline=True
                 )
                 # Add entry field
                 embed.add_field(
@@ -149,6 +184,18 @@ class Commands:
                     value=types,
                     inline=False
                 )
+                # Add height field
+                embed.add_field(
+                    name=Commands._template_text_ja[3],
+                    value=height,
+                    inline=True
+                )
+                # Add weight field
+                embed.add_field(
+                    name=Commands._template_text_ja[4],
+                    value=weight,
+                    inline=True
+                )
                 # Add entry field
                 embed.add_field(
                     name=Commands._template_text_ja[1],
@@ -171,6 +218,18 @@ class Commands:
                     name=Commands._template_text_ja[2],
                     value=types,
                     inline=False
+                )
+                # Add height field
+                embed.add_field(
+                    name=Commands._template_text_ja[3],
+                    value=height,
+                    inline=True
+                )
+                # Add weight field
+                embed.add_field(
+                    name=Commands._template_text_ja[4],
+                    value=weight,
+                    inline=True
                 )
                 # Add entry field
                 embed.add_field(
