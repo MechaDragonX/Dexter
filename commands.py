@@ -113,6 +113,9 @@ class Commands:
             case Language.English:
                 foot = int((meter * 3.281) - float(Decimal(meter * 3.281) % 1))
                 inch = round(float(Decimal(meter * 3.281) % 1) *  12)
+                if inch == 12:
+                    foot =  foot + 1
+                    inch = 0
                 height = f'{meter}m / {foot}\'{inch}"'
             case Language.JapaneseKana:
                 height = f'{meter}m'
