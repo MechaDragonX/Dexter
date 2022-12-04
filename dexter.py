@@ -3,6 +3,8 @@
 import discord
 import pokebase
 
+from commands import Commands
+
 # Read info file to get any special information
 info_file = open('info.txt', 'r').readlines()
 # Read the first line to get the client token
@@ -25,9 +27,13 @@ tree = discord.app_commands.CommandTree(bot)
 
 @tree.command(name='search_name', description='Search for a Pokémon by its English name')
 async def search_name(interaction: discord.Interaction, name: str):
-    await interaction.response.send_message(f'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{pokebase.pokemon_species(name.lower()).id}.png')
+    await interaction.response.send_message(
+        embed=Commands.search(pokebase.pokemon_species(name.lower()).id)
+    )
 @tree.command(name='search_id', description='Search for a Pokémon by its National Pokédex entry number')
 async def search_id(interaction: discord.Interaction, id: int):
-    await interaction.response.send_message(f'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{id}.png')
+    await interaction.response.send_message(
+        embed=Commands.search(id)
+    )
 
 bot.run(token)
