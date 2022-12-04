@@ -136,7 +136,7 @@ class Commands:
         while i  < len(pokemon.abilities):
             match language:
                 case Language.English:
-                    if i == 0 and len(pokemon.abilities) == 2:
+                    if (i < len(pokemon.abilities) - 1) and len(pokemon.abilities) >= 2:
                         abilities += f'{pokemon.abilities[i].ability.names[7].name}, '
                     else:
                         abilities += pokemon.abilities[i].ability.names[7].name
