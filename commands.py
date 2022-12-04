@@ -24,16 +24,16 @@ class Commands:
         'Height',
         'Weight',
         'Abilities',
-        'From "{0}"'
+        'Entry from "{0}"'
     ]
     _template_text_ja = [
         '分類',
-        'ポケモンずかんの説明文',
+        'ずかんの説明文',
         'タイプ',
         '高さ',
         '重さ',
         '特性',
-        '『{0}』より'
+        '説明文　『{0}』より'
     ]
     # All official artwork is 475*475
     _image_size = 200
