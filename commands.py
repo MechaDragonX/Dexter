@@ -24,7 +24,7 @@ class Commands:
         'Height',
         'Weight',
         'Abilities',
-        'From *{0}*'
+        'From "{0}"'
     ]
     _template_text_ja = [
         '分類',
