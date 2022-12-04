@@ -91,7 +91,7 @@ class Commands:
         while i  < len(pokemon.types):
             match language:
                 case Language.English:
-                    if i == 0 and len(pokemon.types) == 2:
+                    if i == 0 and len(pokemon.types) >= 2:
                         types += f'{pokemon.types[i].type.names[7].name}, '
                     else:
                         types += pokemon.types[i].type.names[7].name
