@@ -85,6 +85,27 @@ class Commands:
             case Language.JapaneseKanji:
                 game = entry_list[i].version.names[0].name
 
+        types = ''
+        i = 0
+        while i  < len(pokemon.types):
+            match language:
+                case Language.English:
+                    if i == 0 and len(pokemon.types) == 2:
+                        types += f'{pokemon.types[i].type.names[7].name}, '
+                    else:
+                        types += pokemon.types[i].type.names[7].name
+                case Language.JapaneseKana:
+                    if i == 0 and len(pokemon.types) == 2:
+                        types += f'{pokemon.types[i].type.names[0].name}　'
+                    else:
+                        types += pokemon.types[i].type.names[0].name
+                case Language.JapaneseKanji:
+                    if i == 0 and len(pokemon.types) == 2:
+                        types += f'{pokemon.types[i].type.names[0].name}　'
+                    else:
+                        types += pokemon.types[i].type.names[0].name
+            i += 1
+
         embed = discord.Embed(
             title=title,
             color=Commands._color,
@@ -97,6 +118,12 @@ class Commands:
                 embed.add_field(
                     name=Commands._template_text_en[0],
                     value=genus,
+                    inline=False
+                )
+                # Add type field
+                embed.add_field(
+                    name=Commands._template_text_en[2],
+                    value=types,
                     inline=False
                 )
                 # Add entry field
@@ -116,6 +143,12 @@ class Commands:
                     value=genus,
                     inline=False
                 )
+                # Add type field
+                embed.add_field(
+                    name=Commands._template_text_ja[2],
+                    value=types,
+                    inline=False
+                )
                 # Add entry field
                 embed.add_field(
                     name=Commands._template_text_ja[1],
@@ -131,6 +164,12 @@ class Commands:
                 embed.add_field(
                     name=Commands._template_text_ja[0],
                     value=genus,
+                    inline=False
+                )
+                # Add type field
+                embed.add_field(
+                    name=Commands._template_text_ja[2],
+                    value=types,
                     inline=False
                 )
                 # Add entry field
