@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 import discord
 from enum import IntEnum
@@ -10,16 +11,28 @@ class Language(IntEnum):
     JapaneseKanji = 2
 
 class Commands:
-    # Handles the names aren't just one or two English put together with a space
-    _game_names = {
-        'lets-go-pikachu': 'Let\'s Go, Pikachu!',
-        'lets-go-eevee': 'Let\'s Go, Eevee!',
-        'legends-arceus': 'Legends: Arceus'
-    }
     _lang_codes = [
         'en',
         'ja-Hrkt',
         'ja'
+    ]
+    _template_text_en = [
+        'Species',
+        'Pokédex Entry',
+        'Type',
+        'Height',
+        'Weight',
+        'Ability',
+        'From *{0}*'
+    ]
+    _template_text_ja = [
+        '分類',
+        'ポケモンずかんの説明文',
+        'タイプ',
+        '高さ',
+        '重さ',
+        '特性',
+        '『{0}』より'
     ]
     # All official artwork is 475*475
     _image_size = 200
@@ -55,28 +68,80 @@ class Commands:
                 genus = species.genera[0].genus
         
         entry = ''
-        game = ''
         entry_list = species.flavor_text_entries
-        # current_entry_info = None
         i = len(entry_list) - 1
         while i >= 0:
-            # current_entry_info = entry_list[i]
             if entry_list[i].language.name == Commands._lang_codes[language]:
                 entry = entry_list[i].flavor_text
-                if entry_list[i].version.name in Commands._game_names:
-                    game = Commands._game_names[entry_list[i].version.name]
-                else:
-                    game = entry_list[i].version.name.title().replace('-', ' ')
                 break
             i = i - 1
-        
-        description = f'{genus}\n\n{entry}\n\nFrom {game}'
+
+        game = ''
+        match language:
+            case Language.English:
+                game = entry_list[i].version.names[7].name
+            case Language.JapaneseKana:
+                game = entry_list[i].version.names[0].name
+            case Language.JapaneseKanji:
+                game = entry_list[i].version.names[0].name
 
         embed = discord.Embed(
             title=title,
             color=Commands._color,
-            description=description
         )
         embed.set_image(url=image_url)
+        
+        match language:
+            case Language.English:
+                # Add genius field
+                embed.add_field(
+                    name=Commands._template_text_en[0],
+                    value=genus,
+                    inline=False
+                )
+                # Add entry field
+                embed.add_field(
+                    name=Commands._template_text_en[1],
+                    value=entry,
+                    inline=False
+                )
+                # Add game name as footer
+                embed.set_footer(
+                    text=Commands._template_text_en[6].format(game),
+                )
+            case Language.JapaneseKana:
+                # Add genius field
+                embed.add_field(
+                    name=Commands._template_text_ja[0],
+                    value=genus,
+                    inline=False
+                )
+                # Add entry field
+                embed.add_field(
+                    name=Commands._template_text_ja[1],
+                    value=entry,
+                    inline=False
+                )
+                # Add game name as footer
+                embed.set_footer(
+                    text=Commands._template_text_ja[6].format(game),
+                )
+            case Language.JapaneseKanji:
+                # Add genius field
+                embed.add_field(
+                    name=Commands._template_text_ja[0],
+                    value=genus,
+                    inline=False
+                )
+                # Add entry field
+                embed.add_field(
+                    name=Commands._template_text_ja[1],
+                    value=entry,
+                    inline=False
+                )
+                # Add game name as footer
+                embed.set_footer(
+                    text=Commands._template_text_ja[6].format(game),
+                )
 
         return embed
