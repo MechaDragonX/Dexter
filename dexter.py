@@ -27,8 +27,9 @@ tree = discord.app_commands.CommandTree(bot)
 
 @tree.command(name='search_name', description='Search for a Pokémon by its English name')
 async def search_name(interaction: discord.Interaction, name: str):
+    name = name.lower().replace(' ', '-')
     await interaction.response.send_message(
-        embed=Commands.search(pokebase.pokemon_species(name.lower().replace(' ', '-')).id)
+        embed=Commands.search(pokebase.pokemon_species(name).id)
     )
 @tree.command(name='search_id', description='Search for a Pokémon by its National Pokédex entry number')
 async def search_id(interaction: discord.Interaction, id: int):
