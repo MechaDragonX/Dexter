@@ -23,7 +23,7 @@ class Commands:
         'Type',
         'Height',
         'Weight',
-        'Ability',
+        'Abilities',
         'From *{0}*'
     ]
     _template_text_ja = [
@@ -128,6 +128,33 @@ class Commands:
             case Language.JapaneseKanji:
                 weight = f'{pokemon.weight / 10}kg'
 
+        abilities = ''
+        i = 0
+        while i  < len(pokemon.abilities):
+            match language:
+                case Language.English:
+                    if i == 0 and len(pokemon.abilities) == 2:
+                        abilities += f'{pokemon.abilities[i].ability.names[7].name}, '
+                    else:
+                        abilities += pokemon.abilities[i].ability.names[7].name
+                    if i == len(pokemon.abilities) - 1:
+                        abilities += ' (Hidden)'
+                case Language.JapaneseKana:
+                    if i == 0 and len(pokemon.abilities) == 2:
+                        abilities += f'{pokemon.abilities[i].ability.names[0].name}　'
+                    else:
+                        abilities += pokemon.abilities[i].ability.names[0].name
+                    if i == len(pokemon.abilities) - 1:
+                        abilities += '（かくれ）'
+                case Language.JapaneseKanji:
+                    if i == 0 and len(pokemon.abilities) == 2:
+                        abilities += f'{pokemon.abilities[i].ability.names[0].name}　'
+                    else:
+                        abilities += pokemon.abilities[i].ability.names[0].name
+                    if i == len(pokemon.abilities) - 1:
+                        abilities += '（かくれ）'
+            i += 1
+
         embed = discord.Embed(
             title=title,
             color=Commands._color,
@@ -159,6 +186,12 @@ class Commands:
                     name=Commands._template_text_en[4],
                     value=weight,
                     inline=True
+                )
+                # Add ability field
+                embed.add_field(
+                    name=Commands._template_text_en[5],
+                    value=abilities,
+                    inline=False
                 )
                 # Add entry field
                 embed.add_field(
@@ -195,6 +228,12 @@ class Commands:
                     value=weight,
                     inline=True
                 )
+                # Add ability field
+                embed.add_field(
+                    name=Commands._template_text_ja[5],
+                    value=abilities,
+                    inline=False
+                )
                 # Add entry field
                 embed.add_field(
                     name=Commands._template_text_ja[1],
@@ -229,6 +268,12 @@ class Commands:
                     name=Commands._template_text_ja[4],
                     value=weight,
                     inline=True
+                )
+                # Add ability field
+                embed.add_field(
+                    name=Commands._template_text_ja[5],
+                    value=abilities,
+                    inline=False
                 )
                 # Add entry field
                 embed.add_field(
