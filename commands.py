@@ -120,7 +120,6 @@ class Commands:
                 height = f'{meter}m'
 
         weight = ''
-        kilo = pokemon.weight / 10
         match language:
             case Language.English:
                 weight = f'{pokemon.weight / 10}kg / {round((pokemon.weight / 10) * 2.205, 1)}lb"'
