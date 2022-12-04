@@ -122,7 +122,7 @@ class Commands:
         weight = ''
         match language:
             case Language.English:
-                weight = f'{pokemon.weight / 10}kg / {round((pokemon.weight / 10) * 2.205, 1)}lb"'
+                weight = f'{pokemon.weight / 10}kg / {round((pokemon.weight / 10) * 2.205, 1)}lb'
             case Language.JapaneseKana:
                 weight = f'{pokemon.weight / 10}kg'
             case Language.JapaneseKanji:
