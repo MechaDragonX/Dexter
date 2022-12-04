@@ -137,7 +137,7 @@ class Commands:
                         abilities += f'{pokemon.abilities[i].ability.names[7].name}, '
                     else:
                         abilities += pokemon.abilities[i].ability.names[7].name
-                    if i == len(pokemon.abilities) - 1:
+                    if (i == len(pokemon.abilities) - 1) and ',' in abilities:
                         abilities += ' (Hidden)'
                 case Language.JapaneseKana:
                     if i == 0 and len(pokemon.abilities) == 2:
