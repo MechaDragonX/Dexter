@@ -179,3 +179,9 @@ icon.jpg
 
 # Info file
 info.txt
+
+# Data folder
+data/
+
+# VS Code folder
+.vscode/

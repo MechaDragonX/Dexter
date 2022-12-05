@@ -42,22 +42,20 @@ class Commands:
     _color = 0xf4533A
 
     def get_id(name: str, language: Language = Language.JapaneseKana) -> int:
-        i  = 1
-        while i <= 2000:
-            try:
-                pokebase.pokemon_species(i)
-            except:
+        match language:
+            case Language.JapaneseKana:
+                return Commands._get_id_ja(name)
+            case Language.JapaneseKanji:
+                return Commands._get_id_ja(name)
+    def _get_id_ja(name: str) -> int:
+        with open(f'{__file__.removesuffix("commands.py")}data/jp_names.json') as file:
+            jp_names = json.load(file)
+            id_set = { i for i in jp_names if jp_names[i] == name }
+
+            if len(id_set) != 0:
+                return int(id_set.pop())
+            else:
                 return -1
-            
-            match language:
-                case Language.JapaneseKana:
-                    if name ==  pokebase.pokemon_species(i).names[0].name:
-                        return pokebase.pokemon_species(i).id
-                case Language.JapaneseKanji:
-                    if name ==  pokebase.pokemon_species(i).names[0].name:
-                        return pokebase.pokemon_species(i).id
-            
-            i = i + 1
 
     def search(id: int, language: Language = Language.English) -> discord.Embed:
         species = pokebase.pokemon_species(id)
