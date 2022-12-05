@@ -41,7 +41,7 @@ class Commands:
     _color = 0xf4533A
 
     def get_id(name: str, language: Language = Language.JapaneseKana) -> int:
-        i  = 152
+        i  = 1
         while i <= 2000:
             try:
                 pokebase.pokemon_species(i)
