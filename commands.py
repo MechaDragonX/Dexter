@@ -40,7 +40,25 @@ class Commands:
     # Embed color
     _color = 0xf4533A
 
-    def search(id: int, language:Language=Language.English) -> discord.Embed:
+    def get_id(name: str, language: Language = Language.JapaneseKana) -> int:
+        i  = 152
+        while i <= 2000:
+            try:
+                pokebase.pokemon_species(i)
+            except:
+                return -1
+            
+            match language:
+                case Language.JapaneseKana:
+                    if name ==  pokebase.pokemon_species(i).names[0].name:
+                        return pokebase.pokemon_species(i).id
+                case Language.JapaneseKanji:
+                    if name ==  pokebase.pokemon_species(i).names[0].name:
+                        return pokebase.pokemon_species(i).id
+            
+            i = i + 1
+
+    def search(id: int, language: Language = Language.English) -> discord.Embed:
         species = pokebase.pokemon_species(id)
         pokemon = pokebase.pokemon(id)
 
@@ -143,18 +161,18 @@ class Commands:
                     if (i == len(pokemon.abilities) - 1) and ',' in abilities:
                         abilities += ' (Hidden)'
                 case Language.JapaneseKana:
-                    if i == 0 and len(pokemon.abilities) == 2:
+                    if (i < len(pokemon.abilities) - 1) and len(pokemon.abilities) >= 2:
                         abilities += f'{pokemon.abilities[i].ability.names[0].name}　'
                     else:
                         abilities += pokemon.abilities[i].ability.names[0].name
-                    if i == len(pokemon.abilities) - 1:
+                    if (i == len(pokemon.abilities) - 1) and '　' in abilities:
                         abilities += '（かくれ）'
                 case Language.JapaneseKanji:
-                    if i == 0 and len(pokemon.abilities) == 2:
+                    if (i < len(pokemon.abilities) - 1) and len(pokemon.abilities) >= 2:
                         abilities += f'{pokemon.abilities[i].ability.names[0].name}　'
                     else:
                         abilities += pokemon.abilities[i].ability.names[0].name
-                    if i == len(pokemon.abilities) - 1:
+                    if (i == len(pokemon.abilities) - 1) and '　' in abilities:
                         abilities += '（かくれ）'
             i += 1
 
