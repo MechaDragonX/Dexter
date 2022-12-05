@@ -66,6 +66,8 @@ class Commands:
         genus = Commands._get_pokemon_genus(genus_list=species.genera, language=language)
 
         entry_game = Commands._get_dex_entry_and_game(entry_list=species.flavor_text_entries, language=language)
+        if entry_game == None:
+            return None
         entry = entry_game[0]
         game = entry_game[1]
 
@@ -111,6 +113,8 @@ class Commands:
                 entry = entry_list[i].flavor_text
                 break
             i = i - 1
+        if entry == '':
+            return None
         game = ''
         match language:
             case Language.English:
