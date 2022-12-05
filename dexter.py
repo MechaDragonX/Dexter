@@ -29,9 +29,14 @@ tree = discord.app_commands.CommandTree(bot)
 @tree.command(name='search_name', description='Search for a Pokémon by its English name')
 async def search_name(interaction: discord.Interaction, name: str):
     name = name.lower().replace(' ', '-')
-    await interaction.response.send_message(
-        embed=Commands.search(pokebase.pokemon_species(name).id)
-    )
+    try:
+        await interaction.response.send_message(
+            embed=Commands.search(pokebase.pokemon_species(name).id)
+        )
+    except:
+        await interaction.response.send_message(
+            'Something went wrong!\nDid you spell the name right? The name needs to be spelled exactly right, with the exception of dashes and spaces.\For example, "ho oh" works for "Ho-oh", but "Farfeth\'d" needs an apostrophe.\n\nTry again anytime!'
+        )
 @tree.command(name='search_id', description='Search for a Pokémon by its National Pokédex entry number')
 async def search_id(interaction: discord.Interaction, id: int):
     await interaction.response.send_message(
@@ -46,7 +51,13 @@ async def namae_kensaku_kana(interaction: discord.Integration, name: str):
             'そのポケモンを見つけられない！もしかして、入力ミス？\n名前を直してまた呼んでね！'
         )
     else:
-        embed = Commands.search(id, 1)
+        embed = None
+        try:
+            embed = Commands.search(id, 1)
+        except:
+            await interaction.followup.send(
+                '何かのエラーが発生したようだ！\nボクの悪いかもしれないから、また呼んでね！'
+            )
         if embed == None:
             await interaction.followup.send(
                 'そのポケモンのデータを見つけられない！\n『Pokémon LEGENDS アルセウス』と『ポケットモンスター スカーレット・バイオレット』に登場したポケモンをまだ検索できない！'
@@ -64,7 +75,13 @@ async def namae_kensaku_kanji(interaction: discord.Integration, name: str):
             'そのポケモンを見つけられない！もしかして、入力ミス？\n名前を直してまた呼んでね！'
         )
     else:
-        embed = Commands.search(id, 2)
+        embed = None
+        try:
+            embed = Commands.search(id, 1)
+        except:
+            await interaction.followup.send(
+                '何かのエラーが発生したようだ！\nボクの悪いかもしれないから、また呼んでね！'
+            )
         if embed == None:
             await interaction.followup.send(
                 'そのポケモンのデータを見つけられない！\n『Pokémon LEGENDS アルセウス』と『ポケットモンスター スカーレット・バイオレット』に登場したポケモンをまだ検索できない！'

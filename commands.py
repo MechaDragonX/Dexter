@@ -58,7 +58,11 @@ class Commands:
                 return -1
 
     def search(id: int, language: Language = Language.English) -> discord.Embed:
-        species = pokebase.pokemon_species(id)
+        species = None
+        try:
+            species = pokebase.pokemon_species(id)
+        except:
+            return None
         pokemon = pokebase.pokemon(id)
 
         title = Commands._get_pokemon_name(name_list=species.names, language=language)
