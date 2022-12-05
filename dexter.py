@@ -55,7 +55,7 @@ async def namae_kensaku_kanji(interaction: discord.Integration, name: str):
     id = Commands.get_id(name, 2)
     if id == -1:
         await interaction.followup.send(
-            'あのポケモンを見つけられない！もしかして、入力ミス？\n名前を直してまた呼んでね！'
+            'そのポケモンを見つけられない！もしかして、入力ミス？\n名前を直してまた呼んでね！'
         )
     else:
         await interaction.followup.send(
