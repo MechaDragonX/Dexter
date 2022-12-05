@@ -35,7 +35,7 @@ async def search_name(interaction: discord.Interaction, name: str):
         )
     except:
         await interaction.response.send_message(
-            'Something went wrong!\nDid you spell the name right? The name needs to be spelled exactly right, with the exception of dashes and spaces.\For example, "ho oh" works for "Ho-oh", but "Farfeth\'d" needs an apostrophe.\n\nTry again anytime!'
+            'Something went wrong!\n\nDid you spell the name right? The name needs to be spelled exactly right, with some exceptions:\n"ho oh" works for "Ho-oh", \n"mr mime" works for "Mr. Mime", \n"farfetchd" works for "Farfetch\'d", \n"type null" works for "Type: Null", \n"flabebe" works for "Flabébé", \n"nidoran f" works for "Nidoran ♀", \nand "nidoran m" works for "Nidoran ♂"\nNames with dashes, periods, apostrophes, colons, and accents, do not need them.\n\nTry again anytime!'
         )
 @tree.command(name='search_id', description='Search for a Pokémon by its National Pokédex entry number')
 async def search_id(interaction: discord.Interaction, id: int):
