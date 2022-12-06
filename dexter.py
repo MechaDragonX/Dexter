@@ -42,6 +42,7 @@ async def search_id(interaction: discord.Interaction, id: int):
     await interaction.response.send_message(
         embed=Commands.search(id)
     )
+
 @tree.command(name='namae_kensaku_kana', description='にほんごの　なまえで　ポケモンを　けんさくする（漢字なし）')
 async def namae_kensaku_kana(interaction: discord.Integration, name: str):
     await interaction.response.defer()

@@ -58,11 +58,7 @@ class Commands:
                 return -1
 
     def search(id: int, language: Language = Language.English) -> discord.Embed:
-        species = None
-        try:
-            species = pokebase.pokemon_species(id)
-        except:
-            return None
+        species = pokebase.pokemon_species(id)
         pokemon = pokebase.pokemon(id)
 
         title = Commands._get_pokemon_name(name_list=species.names, language=language)
@@ -90,24 +86,17 @@ class Commands:
         return embed
 
     def _get_pokemon_name(name_list: list, language: Language) -> str:
-        match language:
-            case Language.English:
-                return name_list[8].name
-            case Language.JapaneseKana:
-                return name_list[0].name
-            case Language.JapaneseKanji:
-                # Names are in Katakana anyway, and this prevents running into Czech
-                # (a language games have never released in) which takes the spot right before Kanji
-                return name_list[0].name
+        i = 0
+        while i < len(name_list):
+            if name_list[i].language.name == Commands._lang_codes[language]:
+                return name_list[i].name
+            i += 1
     def _get_pokemon_genus(genus_list: list, language: Language) -> str:
-        match language:
-            case Language.English:
-                # Keep in mind while English is still entry 8, Romaji genus names are not stored
-                return genus_list[7].genus
-            case Language.JapaneseKana:
-                return genus_list[0].genus
-            case Language.JapaneseKanji:
-                return genus_list[0].genus
+        i = 0
+        while i < len(genus_list):
+            if genus_list[i].language.name == Commands._lang_codes[language]:
+                return genus_list[i].genus
+            i += 1
     def _get_dex_entry_and_game(entry_list: list, language: Language) -> list:
         result = []
         entry = ''
@@ -116,40 +105,49 @@ class Commands:
             if entry_list[i].language.name == Commands._lang_codes[language]:
                 entry = entry_list[i].flavor_text
                 break
-            i = i - 1
+            i -= 1
         if entry == '':
             return None
         game = ''
-        match language:
-            case Language.English:
-                game = entry_list[i].version.names[7].name
-            case Language.JapaneseKana:
-                game = entry_list[i].version.names[0].name
-            case Language.JapaneseKanji:
-                game = entry_list[i].version.names[0].name
+        j = 0
+        while j < len(entry_list[i].version.names):
+            if entry_list[i].version.names[j].language.name == Commands._lang_codes[language]:
+                game = entry_list[i].version.names[j].name
+                break
+            j  += 1
         result.append(entry)
         result.append(game)
         return result
     def _get_types(type_list: list, language: Language) -> str:
         types = ''
         i = 0
+        j = 0
         while i  < len(type_list):
-            match language:
-                case Language.English:
-                    if i == 0 and len(type_list) >= 2:
-                        types += f'{type_list[i].type.names[7].name}, '
-                    else:
-                        types += type_list[i].type.names[7].name
-                case Language.JapaneseKana:
-                    if i == 0 and len(type_list) == 2:
-                        types += f'{type_list[i].type.names[0].name}　'
-                    else:
-                        types += type_list[i].type.names[0].name
-                case Language.JapaneseKanji:
-                    if i == 0 and len(type_list) == 2:
-                        types += f'{type_list[i].type.names[0].name}　'
-                    else:
-                        types += type_list[i].type.names[0].name
+            while j < len(type_list[i].type.names):
+                if type_list[i].type.names[j].language.name == Commands._lang_codes[language]:
+                    match language:
+                        case Language.English:
+                            if i == 0 and len(type_list) >= 2:
+                                types += f'{type_list[i].type.names[j].name}, '
+                            else:
+                                types += type_list[i].type.names[j].name
+                            j = 0
+                            break
+                        case Language.JapaneseKana:
+                            if i == 0 and len(type_list) == 2:
+                                types += f'{type_list[i].type.names[j].name}　'
+                            else:
+                                types += type_list[i].type.names[j].name
+                            j = 0
+                            break
+                        case Language.JapaneseKanji:
+                            if i == 0 and len(type_list) == 2:
+                                types += f'{type_list[i].type.names[j].name}　'
+                            else:
+                                types += type_list[i].type.names[j].name
+                            j = 0
+                            break
+                j += 1
             i += 1
         return types
     def _get_height(api_height: int, language: Language) -> str:
@@ -177,29 +175,39 @@ class Commands:
     def _get_abilities(ability_list: list, language: Language) -> str:
         abilities = ''
         i = 0
+        j = 0
         while i  < len(ability_list):
-            match language:
-                case Language.English:
-                    if (i < len(ability_list) - 1) and len(ability_list) >= 2:
-                        abilities += f'{ability_list[i].ability.names[7].name}, '
-                    else:
-                        abilities += ability_list[i].ability.names[7].name
-                    if (i == len(ability_list) - 1) and ',' in abilities:
-                        abilities += ' (Hidden)'
-                case Language.JapaneseKana:
-                    if (i < len(ability_list) - 1) and len(ability_list) >= 2:
-                        abilities += f'{ability_list[i].ability.names[0].name}　'
-                    else:
-                        abilities += ability_list[i].ability.names[0].name
-                    if (i == len(ability_list) - 1) and '　' in abilities:
-                        abilities += '（かくれ）'
-                case Language.JapaneseKanji:
-                    if (i < len(ability_list) - 1) and len(ability_list) >= 2:
-                        abilities += f'{ability_list[i].ability.names[0].name}　'
-                    else:
-                        abilities += ability_list[i].ability.names[0].name
-                    if (i == len(ability_list) - 1) and '　' in abilities:
-                        abilities += '（かくれ）'
+            while j < len(ability_list[i].ability.names):
+                if ability_list[i].ability.names[j].language.name == Commands._lang_codes[language]:
+                    match language:
+                        case Language.English:
+                            if (i < len(ability_list) - 1) and len(ability_list) >= 2:
+                                abilities += f'{ability_list[i].ability.names[j].name}, '
+                            else:
+                                abilities += ability_list[i].ability.names[j].name
+                            if (i == len(ability_list) - 1) and ',' in abilities:
+                                abilities += ' (Hidden)'
+                            j = 0
+                            break
+                        case Language.JapaneseKana:
+                            if (i < len(ability_list) - 1) and len(ability_list) >= 2:
+                                abilities += f'{ability_list[i].ability.names[j].name}　'
+                            else:
+                                abilities += ability_list[i].ability.names[j].name
+                            if (i == len(ability_list) - 1) and '　' in abilities:
+                                abilities += '（かくれ）'
+                            j = 0
+                            break
+                        case Language.JapaneseKanji:
+                            if (i < len(ability_list) - 1) and len(ability_list) >= 2:
+                                abilities += f'{ability_list[i].ability.names[j].name}　'
+                            else:
+                                abilities += ability_list[i].ability.names[j].name
+                            if (i == len(ability_list) - 1) and '　' in abilities:
+                                abilities += '（かくれ）'
+                            j = 0
+                            break
+                j += 1
             i += 1
         return abilities
 
