@@ -78,7 +78,7 @@ async def namae_kensaku_kanji(interaction: discord.Integration, name: str):
     else:
         embed = None
         try:
-            embed = Commands.search(id, 1)
+            embed = Commands.search(id, 2)
         except:
             await interaction.followup.send(
                 '何かのエラーが発生したようだ！\nボクの悪いかもしれないから、また呼んでね！'
