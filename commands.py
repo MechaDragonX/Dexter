@@ -6,6 +6,7 @@ import discord
 from enum import IntEnum
 import json
 import pokebase
+import requests
 
 class Language(IntEnum):
     English = 0,
@@ -37,7 +38,6 @@ class Commands:
         '説明文　『{0}』より'
     ]
     # All official artwork is 475*475
-    _image_size = 200
     # Embed color
     _color = 0xf4533A
 
@@ -56,6 +56,14 @@ class Commands:
                 return int(id_set.pop())
             else:
                 return -1
+            
+    # Returns if query exists as a Pokemon
+    def quick_search(query: str) -> bool:
+        response = requests.get(f'https://pokeapi.co/api/v2/pokemon/{query}/')
+        if response.status_code == 200:
+            return True
+        else:
+            return False
 
     def search(id: int, language: Language = Language.English) -> discord.Embed:
         species = pokebase.pokemon_species(id)

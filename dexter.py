@@ -28,20 +28,37 @@ tree = discord.app_commands.CommandTree(bot)
 
 @tree.command(name='search_name', description='Search for a Pokémon by its English name')
 async def search_name(interaction: discord.Interaction, name: str):
+    await interaction.response.defer()
     name = name.lower().replace(' ', '-')
-    try:
-        await interaction.response.send_message(
-            embed=Commands.search(pokebase.pokemon_species(name).id)
+    if not Commands.quick_search(name):
+        await interaction.followup.send(
+            'That Pokémon does not exist!\n\nDid you spell the name right? The name needs to be spelled exactly right, with some exceptions:\n"ho oh" works for "Ho-oh", \n"mr mime" works for "Mr. Mime", \n"farfetchd" works for "Farfetch\'d", \n"type null" works for "Type: Null", \n"flabebe" works for "Flabébé", \n"nidoran f" works for "Nidoran ♀", \nand "nidoran m" works for "Nidoran ♂"\nNames with dashes, periods, apostrophes, colons, and accents, do not need them.\n\nTry again anytime!'
         )
-    except:
-        await interaction.response.send_message(
-            'Something went wrong!\n\nDid you spell the name right? The name needs to be spelled exactly right, with some exceptions:\n"ho oh" works for "Ho-oh", \n"mr mime" works for "Mr. Mime", \n"farfetchd" works for "Farfetch\'d", \n"type null" works for "Type: Null", \n"flabebe" works for "Flabébé", \n"nidoran f" works for "Nidoran ♀", \nand "nidoran m" works for "Nidoran ♂"\nNames with dashes, periods, apostrophes, colons, and accents, do not need them.\n\nTry again anytime!'
-        )
+    else:
+        try:
+            await interaction.followup.send(
+                embed=Commands.search(pokebase.pokemon_species(name).id)
+            )
+        except:
+            await interaction.followup.send(
+                'Something went wrong!\n\nTry again anytime!'
+            )
 @tree.command(name='search_id', description='Search for a Pokémon by its National Pokédex entry number')
 async def search_id(interaction: discord.Interaction, id: int):
-    await interaction.response.send_message(
-        embed=Commands.search(id)
-    )
+    await interaction.response.defer()
+    if not Commands.quick_search(id):
+        await interaction.followup.send(
+            'That Pokémon does not exist!'
+        )
+    else:
+        try:
+            await interaction.followup.send(
+                embed=Commands.search(id)
+            )
+        except:
+            await interaction.followup.send(
+                'Something went wrong!\n\nTry again anytime!'
+            )
 
 @tree.command(name='namae_kensaku_kana', description='にほんごの　なまえで　ポケモンを　けんさくする（漢字なし）')
 async def namae_kensaku_kana(interaction: discord.Integration, name: str):
