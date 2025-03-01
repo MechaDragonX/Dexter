@@ -108,23 +108,28 @@ class Commands:
     def _get_dex_entry_and_game(entry_list: list, language: Language) -> list:
         result = []
         entry = ''
-        i = len(entry_list) - 1
-        while i >= 0:
+        version_api = None
+        game = ''
+        i = 0
+        while i < len(entry_list):
             if entry_list[i].language.name == Commands._lang_codes[language]:
                 entry = entry_list[i].flavor_text
+                # get to look up game name
+                version_api = pokebase.version(entry_list[i].version.name)
                 break
-            i -= 1
+            i += 1
         if entry == '':
             return None
-        game = ''
         j = 0
-        while j < len(entry_list[i].version.names):
-            if entry_list[i].version.names[j].language.name == Commands._lang_codes[language]:
-                game = entry_list[i].version.names[j].name
+        while j < len(version_api.names):
+            # No name exists for ja, only ja-Hrkt. Likely because all names after GS were katakana only
+            if version_api.names[j].language.name == Commands._lang_codes[language] or version_api.names[j].language.name[:2] == Commands._lang_codes[language]:
+                game = version_api.names[j].name
                 break
-            j  += 1
-        result.append(entry)
-        result.append(game)
+            j += 1
+        # I noticed leading spaces with ソード (sword), so just in case
+        result.append(entry.strip())
+        result.append(game.strip())
         return result
     def _get_types(type_list: list, language: Language) -> str:
         types = ''
