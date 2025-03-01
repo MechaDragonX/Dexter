@@ -88,7 +88,7 @@ async def namae_kensaku_kanji(interaction: discord.Integration, name: str):
     else:
         try:
             await interaction.followup.send(
-                embed=Commands.search(id, 1)
+                embed=Commands.search(id, 2)
             )
         except:
             await interaction.followup.send(
