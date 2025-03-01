@@ -69,20 +69,13 @@ async def namae_kensaku_kana(interaction: discord.Integration, name: str):
             'そのポケモンを見つけられない！もしかして、入力ミス？\n名前を直してまた呼んでね！'
         )
     else:
-        embed = None
         try:
-            embed = Commands.search(id, 1)
+            await interaction.followup.send(
+                embed=Commands.search(id, 1)
+            )
         except:
             await interaction.followup.send(
                 '何かのエラーが発生したようだ！\nボクの悪いかもしれないから、また呼んでね！'
-            )
-        if embed == None:
-            await interaction.followup.send(
-                'そのポケモンのデータを見つけられない！\n『Pokémon LEGENDS アルセウス』と『ポケットモンスター スカーレット・バイオレット』に登場したポケモンをまだ検索できない！'
-            )
-        else:
-            await interaction.followup.send(
-                embed=embed
             )
 @tree.command(name='namae_kensaku_kanji', description='日本語の名前でポケモンを検索する（漢字あり）')
 async def namae_kensaku_kanji(interaction: discord.Integration, name: str):
@@ -93,20 +86,13 @@ async def namae_kensaku_kanji(interaction: discord.Integration, name: str):
             'そのポケモンを見つけられない！もしかして、入力ミス？\n名前を直してまた呼んでね！'
         )
     else:
-        embed = None
         try:
-            embed = Commands.search(id, 2)
+            await interaction.followup.send(
+                embed=Commands.search(id, 1)
+            )
         except:
             await interaction.followup.send(
                 '何かのエラーが発生したようだ！\nボクの悪いかもしれないから、また呼んでね！'
-            )
-        if embed == None:
-            await interaction.followup.send(
-                'そのポケモンのデータを見つけられない！\n『Pokémon LEGENDS アルセウス』と『ポケットモンスター スカーレット・バイオレット』に登場したポケモンをまだ検索できない！'
-            )
-        else:
-            await interaction.followup.send(
-                embed=embed
             )
 
 bot.run(token)
